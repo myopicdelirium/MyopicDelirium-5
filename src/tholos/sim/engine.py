@@ -3,10 +3,10 @@ from .viz import render_frame, write_outputs
 def _clamp(v,a,b):
     return a if v<a else b if v>b else v
 def _mk_env(cfg):
-    W=cfg.env["grid"]; H=cfg.env["grid"]
+    W=cfg.env.grid; H=cfg.env.grid
     rng=random.Random(cfg.seed_env)
     veg=[[max(0,min(255,int(128+40*math.sin(x*0.08)+40*math.cos(y*0.07)+rng.uniform(-20,20)))) for x in range(W)] for y in range(H)]
-    water=[[max(0,min(255,int(80+60*math.sin(x*0.05)+60*math.cos(y*0.05))))) for x in range(W)] for y in range(H)]
+    water=[[max(0,min(255,int(80+60*math.sin(x*0.05)+60*math.cos(y*0.05)))) for x in range(W)] for y in range(H)]
     danger=[[0]*W for _ in range(H)]
     for _ in range(W*H//45):
         cx=rng.randrange(W); cy=rng.randrange(H); r=rng.randint(6,14)
@@ -75,8 +75,8 @@ def run_sim(cfg):
     for t in range(cfg.steps):
         agents,preds=_step(cfg,G,water,veg,danger,agents,preds)
         if t%cfg.render_every==0:
-            frames.append(render_frame(G,water,veg,danger,agents,preds,[],None,None,cfg.env.get("img_scale",2),None))
-    final=render_frame(G,water,veg,danger,agents,preds,[],None,None,cfg.env.get("img_scale",2),None)
+            frames.append(render_frame(G,water,veg,danger,agents,preds,[],None,None,getattr(cfg.env,"img_scale",2),None))
+    final=render_frame(G,water,veg,danger,agents,preds,[],None,None,getattr(cfg.env,"img_scale",2),None)
     out_png=os.path.join(out_dir,"composite.png")
     out_gif=os.path.join(out_dir,"composite.gif")
     viewer=os.path.join(out_dir,"viewer.html")

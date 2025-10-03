@@ -1,0 +1,9 @@
+tag: smoke
+seed: 42
+steps: 800
+render_every: 10
+agents: 80
+predators: 8
+env:
+  grid: 160
+  img_scale: 3
